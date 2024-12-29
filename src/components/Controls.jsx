@@ -1,5 +1,6 @@
-import Slider from "@mui/material/Slider";
-const Controls = ({ onGenerate, onSort, setSize, size }) => {
+import {Slider, Select, MenuItem} from "@mui/material";
+
+const Controls = ({ onGenerate, onSort, setSize, size, onAlgoSelect }) => {
   const onSlide = (event, newValue) => {
     if (typeof newValue === "number") setSize(newValue);
   };
@@ -12,6 +13,10 @@ const Controls = ({ onGenerate, onSort, setSize, size }) => {
         valueLabelDisplay="auto"
         onChange={onSlide}
       />
+      <select onChange={onAlgoSelect} className="AlgoSelect">
+        <option value="bub">Bubble Sort</option>
+        <option value="sel">Selectin Sort</option>
+      </select>
       <button onClick={onGenerate}>Generate</button>
       <button onClick={onSort}>Sort!</button>
     </div>

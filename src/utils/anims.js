@@ -30,7 +30,6 @@ export const bubbleSortAnim = async (arr, bars) => {
 };
 export const selSortAnim = async (arr, bars) => {
   const steps = selectionSort(arr);
-  console.log(steps);
   for (let step of steps) {
     if (step[3]) {
       await swapAnim(bars, step[0], step[2]);
