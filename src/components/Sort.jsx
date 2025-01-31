@@ -1,18 +1,17 @@
 import Canvas from "./Canvas";
 import Controls from "./Controls";
-import { createRef, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { genRandArray } from "../utils/funcs";
 import { bubbleSortAnim, selSortAnim } from "../utils/anims";
+import { useAnimate } from "motion/react";
+
 const Sort = () => {
   const [heights, setHeights] = useState([]);
   const [size, setSize] = useState(10);
   const [renderKey, setRenderKey] = useState(0);
-  const bars = useRef([]);
+  const [barsRef, animate] = useAnimate();
   const [algo, setAlgo] = useState("bub");
   useEffect(() => {
-    bars.current = Array(size)
-      .fill(0)
-      .map((_, i) => createRef());
     generate();
   }, [size]);
   const generate = () => {
@@ -22,10 +21,10 @@ const Sort = () => {
   const sort = () => {
     switch (algo) {
       case "bub":
-        bubbleSortAnim(heights, bars.current);
+        bubbleSortAnim(heights, animate, barsRef);
         break;
       case "sel":
-        selSortAnim(heights, bars.current);
+        selSortAnim(heights, animate, barsRef);
         break;
       default:
         console.error("selecting sort gone wrong!");
@@ -33,6 +32,7 @@ const Sort = () => {
   };
   const changeAlgo = (event) => {
     setAlgo(event.target.value);
+    setRenderKey((prev) => prev + 1);
   };
   return (
     <div className="sort">
@@ -43,7 +43,7 @@ const Sort = () => {
         size={size}
         onAlgoSelect={changeAlgo}
       />
-      <Canvas heights={heights} bars={bars.current} key={renderKey} />
+      <Canvas heights={heights} barsRef={barsRef} key={renderKey} />
     </div>
   );
 };

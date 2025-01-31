@@ -1,8 +1,7 @@
 import { motion } from "motion/react";
-import { forwardRef } from "react";
 
-const Bar = forwardRef(({ h }, ref) => {
-  return <motion.div ref={ref} className="bar" style={{ height: `${h}em` }} />;
-});
+const Bar = ({ h, id }) => {
+  return <motion.div className={`bar b${id}`} style={{ height: `${h}em` }} />;
+};
 
 export default Bar;

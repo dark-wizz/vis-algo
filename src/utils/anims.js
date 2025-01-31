@@ -1,60 +1,58 @@
-import { animate } from "motion/react";
 import { xFromTranslate } from "./funcs";
 import { bubbleSort, selectionSort } from "./sort";
 
-export const bubbleSortAnim = async (arr, bars) => {
+export const bubbleSortAnim = async (arr, animate, scope) => {
   const steps = bubbleSort(arr);
   for (let step of steps) {
-    let ctrl = animate(bars[step[0]].current, {
+    let ctrl = animate(`.b${step[0]}`, {
       y: "-2em",
       backgroundColor: "purple",
     });
-    ctrl = animate(bars[step[1]].current, {
+    ctrl = animate(`.b${step[1]}`, {
       y: "-2em",
       backgroundColor: "purple",
     });
     await ctrl;
-    ctrl = animate(bars[step[0]].current, {
+    ctrl = animate(`.b${step[0]}`, {
       y: 0,
       backgroundColor: "pink",
     });
-    ctrl = animate(bars[step[1]].current, {
+    ctrl = animate(`.b${[step[1]]}`, {
       y: 0,
       backgroundColor: "pink",
     });
     await ctrl;
     if (step[2]) {
-      await swapAnim(bars, step[0], step[1]);
+      await swapAnim(animate, scope, step[0], step[1]);
     }
   }
 };
-export const selSortAnim = async (arr, bars) => {
+export const selSortAnim = async (arr, animate, scope) => {
   const steps = selectionSort(arr);
   for (let step of steps) {
     if (step[3]) {
-      await swapAnim(bars, step[0], step[2]);
+      await swapAnim(animate, scope, step[0], step[2]);
       continue;
     }
-    animate(bars[step[2]].current, {
+    animate(`.b${step[2]}`, {
       backgroundColor: "red",
     });
-    await animate(bars[step[1]].current, {
+    await animate(`.b${step[1]}`, {
       y: "-2em",
       backgroundColor: "purple",
     });
-    await animate(bars[step[1]].current, {
+    await animate(`.b${step[1]}`, {
       y: 0,
       backgroundColor: "pink",
     });
-
-    animate(bars[step[2]].current, {
+    animate(`.b${step[2]}`, {
       backgroundColor: "pink",
     });
   }
 };
-async function swapAnim(bars, i1, i2) {
-  let b1 = bars[i1].current;
-  let b2 = bars[i2].current;
+async function swapAnim(animate, scope, i1, i2) {
+  let b1 = scope.current.querySelector(`.b${i1}`);
+  let b2 = scope.current.querySelector(`.b${i2}`);
 
   let x1 = xFromTranslate(b1.style.transform);
   let x2 = xFromTranslate(b2.style.transform);
@@ -80,8 +78,6 @@ async function swapAnim(bars, i1, i2) {
       backgroundColor: { times: [0.9, 1] },
     },
   );
-  let temp = bars[i1];
-  bars[i1] = bars[i2];
-
-  bars[i2] = temp;
+  b1.classList.replace(`b${i1}`, `b${i2}`);
+  b2.classList.replace(`b${i2}`, `b${i1}`);
 }
